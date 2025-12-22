@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "142490243646",
+    "project_id": "shasthohive",
+    "storage_bucket": "shasthohive.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142490243646:android:6d1e6382c17876917d376f",
+        "android_client_info": {
+          "package_name": "com.aniksadataniqa.shasthohive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_Egw2fa72LC8YnXTjS3nYWtwjKIZDVYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
