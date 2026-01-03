@@ -31,8 +31,9 @@ interface WorkoutRoutine {
 
 export default function WorkoutScreen() {
   const router = useRouter();
+  const calendarRef = useRef<any>(null);
   const [selectedDate, setSelectedDate] = useState(moment());
-  const [startingDate] = useState(moment().subtract(3, 'days'));
+  const [startingDate] = useState(moment().startOf('day').subtract(3, 'days'));
   const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
   const [workout, setWorkout] = useState<WorkoutRoutine | null>(null);
   const [loading, setLoading] = useState(true);
@@ -97,8 +98,9 @@ export default function WorkoutScreen() {
   };
 
   const handleDateSelected = (date: moment.Moment) => {
-    setSelectedDate(date);
-    // In a real app, you'd fetch history for this date
+    if (date && date.isValid()) {
+      setSelectedDate(date.clone().startOf('day'));
+    }
   };
 
   const toggleVideo = (videoId: string) => {
@@ -182,8 +184,11 @@ export default function WorkoutScreen() {
         {/* Calendar Strip */}
         <View className="mb-6">
           <CalendarStrip
+            ref={calendarRef}
             scrollable
-            startingDate={startingDate}
+            scrollerPaging
+            startingDate={startingDate.toDate()}
+            selectedDate={selectedDate.toDate()}
             style={{ height: 100, paddingTop: 10, paddingBottom: 10 }}
             calendarColor={'transparent'}
             calendarHeaderStyle={{ color: '#9333EA', fontSize: 16, marginBottom: 10 }}
@@ -192,9 +197,11 @@ export default function WorkoutScreen() {
             iconContainer={{ flex: 0.1 }}
             highlightDateNumberStyle={{ color: 'white', backgroundColor: '#9333EA', borderRadius: 15, overflow: 'hidden', width: 30, height: 30, textAlign: 'center', lineHeight: 30 }}
             highlightDateNameStyle={{ color: '#9333EA' }}
-            selectedDate={selectedDate}
             onDateSelected={handleDateSelected}
             daySelectionAnimation={{ type: 'background', duration: 200, highlightColor: '#F3E8FF' }}
+            useIsoWeekday={false}
+            minDate={moment().subtract(30, 'days').toDate()}
+            maxDate={moment().add(30, 'days').toDate()}
           />
         </View>
 
