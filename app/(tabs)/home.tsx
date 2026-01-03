@@ -27,6 +27,7 @@ interface HealthCardProps {
 function HealthCard({ icon, iconColor, bgColor, title, value, unit, subtitle, subtitleColor = 'text-gray-500', editable, onSave, keyboardType = 'numeric' }: HealthCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value?.toString() || '');
+  const [isSaving, setIsSaving] = useState(false);
 
   // Update tempValue when value prop changes, but only if not currently editing
   useEffect(() => {
@@ -36,9 +37,24 @@ function HealthCard({ icon, iconColor, bgColor, title, value, unit, subtitle, su
   }, [value, isEditing]);
 
   const handleSave = async () => {
-    if (onSave) {
-      await onSave(tempValue);
+    if (isSaving) return;
+    setIsSaving(true);
+    
+    try {
+      if (onSave && tempValue.trim()) {
+        console.log(`[HealthCard] Saving ${title}: ${tempValue}`);
+        await onSave(tempValue);
+      }
+    } catch (err) {
+      console.error(`[HealthCard] Save error for ${title}:`, err);
+    } finally {
+      setIsSaving(false);
+      setIsEditing(false);
     }
+  };
+
+  const handleCancel = () => {
+    setTempValue(value?.toString() || '');
     setIsEditing(false);
   };
 
@@ -68,11 +84,15 @@ function HealthCard({ icon, iconColor, bgColor, title, value, unit, subtitle, su
             onChangeText={setTempValue}
             keyboardType={keyboardType}
             autoFocus
-            onBlur={() => setIsEditing(false)}
+            selectTextOnFocus
+            returnKeyType="done"
             onSubmitEditing={handleSave}
           />
           {unit && <Text className="ml-1 text-lg text-gray-500 dark:text-gray-400">{unit}</Text>}
-          <TouchableOpacity onPress={handleSave} className="ml-2 p-1 bg-green-100 rounded-full">
+          <TouchableOpacity onPress={handleCancel} className="ml-2 p-1 bg-gray-100 dark:bg-gray-800 rounded-full">
+            <MaterialIcons name="close" size={16} color="#9CA3AF" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleSave} disabled={isSaving} className="ml-1 p-1 bg-green-100 dark:bg-green-900/30 rounded-full">
             <MaterialIcons name="check" size={16} color="#10B981" />
           </TouchableOpacity>
         </View>
