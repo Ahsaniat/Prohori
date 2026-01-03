@@ -226,7 +226,7 @@ class HealthConnectService {
     }
   }
 
-  // Read active calories burned
+  // Read active calories burned using aggregation (more reliable)
   async readActiveCalories(): Promise<number | null> {
     try {
       const permissions = await this.checkPermissions();
@@ -235,34 +235,32 @@ class HealthConnectService {
         return null;
       }
 
-      // Use readRecords instead of aggregateRecord for more reliable results
-      const { records } = await readRecords('ActiveCaloriesBurned', {
+      // Use aggregateRecord for reliable totals (same approach as steps)
+      const result = await aggregateRecord({
+        recordType: 'ActiveCaloriesBurned',
         timeRangeFilter: this.getTodayTimeRange(),
       });
 
-      if (!records || records.length === 0) {
-        console.log('[HealthConnect] No ActiveCaloriesBurned records found');
-        return null;
+      console.log(`[HealthConnect] ActiveCaloriesBurned aggregate result: ${JSON.stringify(result)}`);
+
+      // The aggregation result contains ACTIVE_CALORIES_TOTAL with inKilocalories
+      const kcal = (result as any)?.ACTIVE_CALORIES_TOTAL?.inKilocalories ?? null;
+      
+      if (kcal !== null && kcal > 0) {
+        const rounded = Math.round(kcal);
+        console.log(`[HealthConnect] Active Calories found: ${rounded} kcal`);
+        return rounded;
       }
-
-      // Sum up all calories from records
-      let totalCalories = 0;
-      records.forEach((record: any) => {
-        if (record.energy?.inKilocalories) {
-          totalCalories += record.energy.inKilocalories;
-        }
-      });
-
-      const result = totalCalories > 0 ? Math.round(totalCalories) : null;
-      console.log(`[HealthConnect] Active Calories found: ${result} kcal from ${records.length} records`);
-      return result;
+      
+      console.log('[HealthConnect] No ActiveCaloriesBurned data found');
+      return null;
     } catch (error) {
       console.error('[HealthConnect] Error reading active calories:', error);
       return null;
     }
   }
 
-  // Read total calories burned
+  // Read total calories burned using aggregation (more reliable)
   async readTotalCalories(): Promise<number | null> {
     try {
       const permissions = await this.checkPermissions();
@@ -271,27 +269,26 @@ class HealthConnectService {
         return null;
       }
 
-      // Use readRecords instead of aggregateRecord for more reliable results
-      const { records } = await readRecords('TotalCaloriesBurned', {
+      // Use aggregateRecord for reliable totals
+      const result = await aggregateRecord({
+        recordType: 'TotalCaloriesBurned',
         timeRangeFilter: this.getTodayTimeRange(),
       });
 
-      if (!records || records.length === 0) {
-        console.log('[HealthConnect] No TotalCaloriesBurned records found');
-        return null;
+      console.log(`[HealthConnect] TotalCaloriesBurned aggregate result: ${JSON.stringify(result)}`);
+
+      // The aggregation result contains TOTAL_CALORIES_TOTAL with inKilocalories
+      const kcal = (result as any)?.TOTAL_CALORIES_TOTAL?.inKilocalories 
+        ?? (result as any)?.ENERGY_TOTAL?.inKilocalories ?? null;
+      
+      if (kcal !== null && kcal > 0) {
+        const rounded = Math.round(kcal);
+        console.log(`[HealthConnect] Total Calories found: ${rounded} kcal`);
+        return rounded;
       }
-
-      // Sum up all calories from records
-      let totalCalories = 0;
-      records.forEach((record: any) => {
-        if (record.energy?.inKilocalories) {
-          totalCalories += record.energy.inKilocalories;
-        }
-      });
-
-      const result = totalCalories > 0 ? Math.round(totalCalories) : null;
-      console.log(`[HealthConnect] Total Calories found: ${result} kcal from ${records.length} records`);
-      return result;
+      
+      console.log('[HealthConnect] No TotalCaloriesBurned data found');
+      return null;
     } catch (error) {
       console.error('[HealthConnect] Error reading total calories:', error);
       return null;
