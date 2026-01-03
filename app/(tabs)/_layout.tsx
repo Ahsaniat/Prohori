@@ -7,10 +7,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
-  const { bottom } = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
+      safeAreaInsets={{ bottom: insets.bottom }}
       screenOptions={{
         tabBarActiveTintColor: '#9333EA', // purple-600
           tabBarInactiveTintColor: isDark ? '#9CA3AF' : '#6B7280', // gray-400 : gray-500
@@ -18,15 +19,11 @@ export default function TabLayout() {
             borderTopWidth: 1,
             borderTopColor: isDark ? '#1F2937' : '#E5E7EB',
             backgroundColor: isDark ? '#000000' : '#FFFFFF',
-            paddingBottom: Math.max(bottom, 5),
-            paddingTop: 5,
-            height: 60 + Math.max(bottom, 0),
           },
           headerShown: false,
           tabBarLabelStyle: {
             fontSize: 12,
             fontWeight: '500',
-            marginBottom: 2,
           },
         }}>
         <Tabs.Screen
