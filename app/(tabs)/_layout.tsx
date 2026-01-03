@@ -2,10 +2,12 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useColorScheme } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+  const { bottom } = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -16,9 +18,9 @@ export default function TabLayout() {
             borderTopWidth: 1,
             borderTopColor: isDark ? '#1F2937' : '#E5E7EB',
             backgroundColor: isDark ? '#000000' : '#FFFFFF',
-            paddingBottom: 5,
+            paddingBottom: Math.max(bottom, 5),
             paddingTop: 5,
-            height: 60,
+            height: 60 + Math.max(bottom, 0),
           },
           headerShown: false,
           tabBarLabelStyle: {
