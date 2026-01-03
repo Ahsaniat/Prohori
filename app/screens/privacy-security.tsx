@@ -86,7 +86,7 @@ export default function PrivacySecurityScreen() {
           icon="lock"
           title="Change Password"
           description="Update your account password"
-          onPress={() => {}}
+          onPress={() => router.push('/screens/change-password')}
         />
         <SettingRow
           icon="security"
