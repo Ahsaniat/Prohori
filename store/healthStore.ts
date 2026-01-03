@@ -210,6 +210,9 @@ export const useHealthStore = create<HealthState>((set, get) => ({
   updateLocalData: async (key: keyof HealthData, value: number) => {
     const { dbHealthData, isHealthConnectAvailable, permissionsGranted } = get();
     
+    console.log(`[HealthStore] updateLocalData called: ${key} = ${value}`);
+    console.log(`[HealthStore] isHealthConnectAvailable: ${isHealthConnectAvailable}, permissionsGranted: ${permissionsGranted}`);
+    
     // 1. Optimistic UI Update
     const updatePayload: any = { [key]: value };
     if (key === 'sleep_hours') {
@@ -233,6 +236,7 @@ export const useHealthStore = create<HealthState>((set, get) => ({
       
       // 2. Try Health Connect Write
       if (isHealthConnectAvailable && permissionsGranted) {
+        console.log(`[HealthStore] Attempting Health Connect write for ${key}`);
         switch (key) {
           case 'weight':
             hcSuccess = await healthConnectService.writeWeight(value);
@@ -247,12 +251,17 @@ export const useHealthStore = create<HealthState>((set, get) => ({
             hcSuccess = await healthConnectService.writeSleep(value);
             break;
         }
+        console.log(`[HealthStore] Health Connect write result: ${hcSuccess}`);
+      } else {
+        console.log(`[HealthStore] Skipping Health Connect write - not available or no permissions`);
       }
 
       // 3. Sync or Direct Save
       if (hcSuccess) {
+        console.log(`[HealthStore] HC write succeeded, triggering sync`);
         await get().syncData();
       } else {
+        console.log(`[HealthStore] HC write failed or skipped, saving directly to API`);
         await healthApiService.saveManualData(updatePayload);
         await get().fetchFromDB();
       }

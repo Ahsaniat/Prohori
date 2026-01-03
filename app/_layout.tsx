@@ -65,6 +65,9 @@ export default function RootLayout() {
           <Stack.Screen name="screens/preferences/two-factor-auth" options={{ headerShown: false }} />
           <Stack.Screen name="screens/change-password" options={{ headerShown: false }} />
           <Stack.Screen name="screens/live-support" options={{ headerShown: false }} />
+          <Stack.Screen name="screens/terms-of-service" options={{ headerShown: false }} />
+          <Stack.Screen name="screens/privacy-policy" options={{ headerShown: false }} />
+          <Stack.Screen name="screens/open-source-licenses" options={{ headerShown: false }} />
         </Stack>
       </KnockWrapper>
       <StatusBar style="auto" />

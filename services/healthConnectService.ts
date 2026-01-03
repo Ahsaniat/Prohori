@@ -110,17 +110,34 @@ class HealthConnectService {
     }
   }
 
-  // Check if specific permissions are granted
+  // Check if specific permissions are granted (both read and write)
   async checkPermissions(): Promise<{ [key: string]: boolean }> {
     const permissions: { [key: string]: boolean } = {};
 
     try {
       const granted = await getGrantedPermissions();
-      const grantedTypes = granted.map((p: any) => p.recordType);
+      
+      // Build a set of "accessType:recordType" strings for quick lookup
+      const grantedSet = new Set(
+        granted.map((p: any) => `${p.accessType}:${p.recordType}`)
+      );
 
       HEALTH_PERMISSIONS.forEach((perm) => {
-        permissions[perm.recordType] = grantedTypes.includes(perm.recordType);
+        const key = perm.accessType === 'write' 
+          ? `write_${perm.recordType}` 
+          : perm.recordType;
+        permissions[key] = grantedSet.has(`${perm.accessType}:${perm.recordType}`);
       });
+      
+      // Also keep backward compatibility - mark recordType as true if ANY permission exists
+      HEALTH_PERMISSIONS.forEach((perm) => {
+        if (!permissions[perm.recordType]) {
+          permissions[perm.recordType] = grantedSet.has(`read:${perm.recordType}`) || 
+                                          grantedSet.has(`write:${perm.recordType}`);
+        }
+      });
+      
+      console.log('[HealthConnect] Permissions check:', JSON.stringify(permissions));
     } catch (error) {
       console.error('Error checking permissions:', error);
     }
@@ -595,9 +612,17 @@ class HealthConnectService {
   // Write sleep data
   async writeSleep(hours: number): Promise<boolean> {
     try {
+      console.log(`[HealthConnect] writeSleep called with ${hours} hours`);
+      const permissions = await this.checkPermissions();
+      if (!permissions['write_SleepSession']) {
+        console.log('[HealthConnect] Missing WRITE permission for SleepSession');
+        return false;
+      }
+      
       const now = new Date();
       const startTime = new Date(now.getTime() - hours * 60 * 60 * 1000);
       
+      console.log(`[HealthConnect] Inserting SleepSession: ${startTime.toISOString()} - ${now.toISOString()}`);
       const result = await insertRecords([
         {
           recordType: 'SleepSession',
@@ -608,7 +633,7 @@ class HealthConnectService {
       console.log(`[HealthConnect] Wrote sleep: ${hours} hours, IDs:`, result);
       return true;
     } catch (error) {
-      console.error('Error writing sleep:', error);
+      console.error('[HealthConnect] Error writing sleep:', error);
       return false;
     }
   }
@@ -616,6 +641,14 @@ class HealthConnectService {
   // Write weight data
   async writeWeight(weightKg: number): Promise<boolean> {
     try {
+      console.log(`[HealthConnect] writeWeight called with ${weightKg} kg`);
+      const permissions = await this.checkPermissions();
+      if (!permissions['write_Weight']) {
+        console.log('[HealthConnect] Missing WRITE permission for Weight');
+        return false;
+      }
+      
+      console.log(`[HealthConnect] Inserting Weight record: ${weightKg}kg`);
       const result = await insertRecords([
         {
           recordType: 'Weight',
@@ -626,7 +659,7 @@ class HealthConnectService {
       console.log(`[HealthConnect] Wrote weight: ${weightKg}kg, IDs:`, result);
       return true;
     } catch (error) {
-      console.error('Error writing weight:', error);
+      console.error('[HealthConnect] Error writing weight:', error);
       if ((error as any).message?.includes('SecurityException')) {
          console.error('[HealthConnect] Missing WRITE_WEIGHT permission!');
       }
@@ -637,17 +670,26 @@ class HealthConnectService {
   // Write height data
   async writeHeight(heightCm: number): Promise<boolean> {
     try {
+      console.log(`[HealthConnect] writeHeight called with ${heightCm} cm`);
+      const permissions = await this.checkPermissions();
+      if (!permissions['write_Height']) {
+        console.log('[HealthConnect] Missing WRITE permission for Height');
+        return false;
+      }
+      
+      const heightM = heightCm / 100;
+      console.log(`[HealthConnect] Inserting Height record: ${heightM}m`);
       const result = await insertRecords([
         {
           recordType: 'Height',
-          height: { value: heightCm / 100, unit: 'meters' },
+          height: { value: heightM, unit: 'meters' },
           time: new Date().toISOString(),
         },
       ]);
       console.log(`[HealthConnect] Wrote height: ${heightCm}cm, IDs:`, result);
       return true;
     } catch (error) {
-      console.error('Error writing height:', error);
+      console.error('[HealthConnect] Error writing height:', error);
       if ((error as any).message?.includes('SecurityException')) {
          console.error('[HealthConnect] Missing WRITE_HEIGHT permission!');
       }
@@ -658,9 +700,17 @@ class HealthConnectService {
   // Write hydration data
   async writeHydration(liters: number): Promise<boolean> {
     try {
+      console.log(`[HealthConnect] writeHydration called with ${liters} L`);
+      const permissions = await this.checkPermissions();
+      if (!permissions['write_Hydration']) {
+        console.log('[HealthConnect] Missing WRITE permission for Hydration');
+        return false;
+      }
+      
       const now = new Date();
       const startTime = new Date(now.getTime() - 1000); // 1 second duration
       
+      console.log(`[HealthConnect] Inserting Hydration record: ${liters}L`);
       const result = await insertRecords([
         {
           recordType: 'Hydration',
@@ -672,7 +722,7 @@ class HealthConnectService {
       console.log(`[HealthConnect] Wrote hydration: ${liters}L, IDs:`, result);
       return true;
     } catch (error) {
-      console.error('Error writing hydration:', error);
+      console.error('[HealthConnect] Error writing hydration:', error);
       return false;
     }
   }

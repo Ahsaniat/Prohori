@@ -137,9 +137,9 @@ export default function HomeScreen() {
   
     // Check if we have essential write permissions (Weight, Height, Sleep)
     const hasWritePermissions = permissionsGranted && (
-      permissions['Weight'] && 
-      permissions['Height'] && 
-      permissions['SleepSession']
+      permissions['write_Weight'] && 
+      permissions['write_Height'] && 
+      permissions['write_SleepSession']
     );
   
     // Calculate progress for steps (goal: 10000)
@@ -289,16 +289,9 @@ export default function HomeScreen() {
               </Text>
             </View>
             <View className="flex-row">
-              <TouchableOpacity onPress={() => router.push('/screens/notifications')} className="p-2 mr-2">
+              <TouchableOpacity onPress={() => router.push('/screens/notifications')} className="p-2">
                 <MaterialIcons name="notifications-none" size={24} color="#9333EA" />
               </TouchableOpacity>
-              
-              {/* Settings Icon: Opens Permission Request to allow upgrading permissions */}
-              {isHealthConnectAvailable && (
-                <TouchableOpacity onPress={() => requestPermissions()} className="p-2">
-                  <MaterialIcons name="settings" size={24} color={hasWritePermissions ? "#9333EA" : "#F59E0B"} />
-                </TouchableOpacity>
-              )}
             </View>
           </View>
   
