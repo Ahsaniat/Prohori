@@ -100,25 +100,34 @@ export default function AboutUsScreen() {
         <Text className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
           Legal
         </Text>
-        <TouchableOpacity className="flex-row items-center justify-between py-4">
+        <TouchableOpacity 
+          className="flex-row items-center justify-between py-4"
+          onPress={() => router.push('/screens/terms-of-service')}
+        >
           <Text className="text-base text-gray-900 dark:text-white">Terms of Service</Text>
           <MaterialIcons name="chevron-right" size={24} color="#9CA3AF" />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center justify-between py-4">
+        <TouchableOpacity 
+          className="flex-row items-center justify-between py-4"
+          onPress={() => router.push('/screens/privacy-policy')}
+        >
           <Text className="text-base text-gray-900 dark:text-white">Privacy Policy</Text>
           <MaterialIcons name="chevron-right" size={24} color="#9CA3AF" />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center justify-between py-4">
+        <TouchableOpacity 
+          className="flex-row items-center justify-between py-4"
+          onPress={() => router.push('/screens/open-source-licenses')}
+        >
           <Text className="text-base text-gray-900 dark:text-white">Open Source Licenses</Text>
           <MaterialIcons name="chevron-right" size={24} color="#9CA3AF" />
         </TouchableOpacity>
 
         {/* Footer */}
         <Text className="text-center text-gray-400 dark:text-gray-600 text-sm mt-6 mb-2">
-          Made with ❤️ for your health
+          Made with care for your health
         </Text>
         <Text className="text-center text-gray-400 dark:text-gray-600 text-xs">
-          © 2025 ShastoHive. All rights reserved.
+          2026 ShastoHive. All rights reserved.
         </Text>
       </ScrollView>
     </View>

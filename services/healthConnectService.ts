@@ -598,14 +598,14 @@ class HealthConnectService {
       const now = new Date();
       const startTime = new Date(now.getTime() - hours * 60 * 60 * 1000);
       
-      await insertRecords([
+      const result = await insertRecords([
         {
           recordType: 'SleepSession',
           startTime: startTime.toISOString(),
           endTime: now.toISOString(),
         },
       ]);
-      console.log(`[HealthConnect] Wrote sleep: ${hours} hours`);
+      console.log(`[HealthConnect] Wrote sleep: ${hours} hours, IDs:`, result);
       return true;
     } catch (error) {
       console.error('Error writing sleep:', error);
@@ -616,18 +616,17 @@ class HealthConnectService {
   // Write weight data
   async writeWeight(weightKg: number): Promise<boolean> {
     try {
-      await insertRecords([
+      const result = await insertRecords([
         {
           recordType: 'Weight',
-          weight: { inKilograms: weightKg },
+          weight: { value: weightKg, unit: 'kilograms' },
           time: new Date().toISOString(),
         },
       ]);
-      console.log(`[HealthConnect] Wrote weight: ${weightKg}kg`);
+      console.log(`[HealthConnect] Wrote weight: ${weightKg}kg, IDs:`, result);
       return true;
     } catch (error) {
       console.error('Error writing weight:', error);
-      // Log more details if available
       if ((error as any).message?.includes('SecurityException')) {
          console.error('[HealthConnect] Missing WRITE_WEIGHT permission!');
       }
@@ -638,14 +637,14 @@ class HealthConnectService {
   // Write height data
   async writeHeight(heightCm: number): Promise<boolean> {
     try {
-      await insertRecords([
+      const result = await insertRecords([
         {
           recordType: 'Height',
-          height: { inMeters: heightCm / 100 },
+          height: { value: heightCm / 100, unit: 'meters' },
           time: new Date().toISOString(),
         },
       ]);
-      console.log(`[HealthConnect] Wrote height: ${heightCm}cm`);
+      console.log(`[HealthConnect] Wrote height: ${heightCm}cm, IDs:`, result);
       return true;
     } catch (error) {
       console.error('Error writing height:', error);
@@ -662,15 +661,15 @@ class HealthConnectService {
       const now = new Date();
       const startTime = new Date(now.getTime() - 1000); // 1 second duration
       
-      await insertRecords([
+      const result = await insertRecords([
         {
           recordType: 'Hydration',
-          volume: { inLiters: liters },
+          volume: { value: liters, unit: 'liters' },
           startTime: startTime.toISOString(),
           endTime: now.toISOString(),
         },
       ]);
-      console.log(`[HealthConnect] Wrote hydration: ${liters}L`);
+      console.log(`[HealthConnect] Wrote hydration: ${liters}L, IDs:`, result);
       return true;
     } catch (error) {
       console.error('Error writing hydration:', error);
