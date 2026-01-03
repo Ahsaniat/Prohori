@@ -42,7 +42,7 @@ class AuthService {
     console.log('[AuthService] healthApiService token set, isAuthenticated:', healthApiService.isAuthenticated());
   }
 
-  async login(email, password) {
+  async login(email: string, password: string) {
     try {
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
@@ -67,7 +67,7 @@ class AuthService {
     }
   }
 
-  async register(name, email, password) {
+  async register(name: string, email: string, password: string) {
     try {
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
