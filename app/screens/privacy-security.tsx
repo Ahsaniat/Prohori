@@ -11,7 +11,6 @@ export default function PrivacySecurityScreen() {
   const { top, bottom } = useSafeAreaInsets();
   const { colorScheme } = useColorScheme();
   
-  const [biometricLogin, setBiometricLogin] = useState(false);
   const [dataSharing, setDataSharing] = useState(true);
   const [analytics, setAnalytics] = useState(true);
 
@@ -75,14 +74,6 @@ export default function PrivacySecurityScreen() {
           Security
         </Text>
         <SettingRow
-          icon="fingerprint"
-          title="Biometric Login"
-          description="Use fingerprint or face ID to login"
-          type="switch"
-          value={biometricLogin}
-          onValueChange={setBiometricLogin}
-        />
-        <SettingRow
           icon="lock"
           title="Change Password"
           description="Update your account password"
@@ -115,23 +106,11 @@ export default function PrivacySecurityScreen() {
           value={analytics}
           onValueChange={setAnalytics}
         />
-        <SettingRow
-          icon="visibility-off"
-          title="Profile Visibility"
-          description="Control who can see your profile"
-          onPress={() => {}}
-        />
 
         {/* Data Section */}
         <Text className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-6 mb-2">
           Data Management
         </Text>
-        <SettingRow
-          icon="download"
-          title="Download My Data"
-          description="Get a copy of your personal data"
-          onPress={() => {}}
-        />
         <SettingRow
           icon="delete-forever"
           title="Delete Account"

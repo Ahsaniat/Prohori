@@ -100,7 +100,6 @@ export default function PersonalInfoScreen() {
                     {formData.name ? formData.name.charAt(0).toUpperCase() : 'U'}
                   </Text>
               </View>
-              <Text className="text-purple-600 font-medium">Change Profile Photo</Text>
           </View>
 
           <View>
