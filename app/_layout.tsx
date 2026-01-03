@@ -60,6 +60,8 @@ export default function RootLayout() {
           <Stack.Screen name="screens/about-us" options={{ headerShown: false }} />
           <Stack.Screen name="screens/chat-history" options={{ headerShown: false }} />
           <Stack.Screen name="screens/chat-detail" options={{ headerShown: false }} />
+          <Stack.Screen name="screens/health-goals" options={{ headerShown: false }} />
+          <Stack.Screen name="screens/health-insights" options={{ headerShown: false }} />
         </Stack>
       </KnockWrapper>
       <StatusBar style="auto" />

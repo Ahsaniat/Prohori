@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform, TouchableOpacity, Alert } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { StatusBar } from 'expo-status-bar';
 import authService from '../../services/authService';
+import auth from '@react-native-firebase/auth';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -17,10 +18,31 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await authService.login(email, password);
-      router.replace('/(tabs)/home');
-    } catch (error) {
+      
+      // Firebase Sync for 2FA
+      try {
+        await auth().signInWithEmailAndPassword(email, password);
+      } catch (e: any) {
+        if (e.code === 'auth/user-not-found') {
+           try {
+             await auth().createUserWithEmailAndPassword(email, password);
+           } catch (createErr) {
+             console.log('Failed to create firebase user', createErr);
+           }
+        } else {
+           console.log('Firebase login failed', e);
+        }
+      }
+
+      const user = auth().currentUser;
+      if (user?.phoneNumber) {
+        router.replace({ pathname: '/screens/otp-login', params: { phoneNumber: user.phoneNumber } });
+      } else {
+        router.replace('/(tabs)/home');
+      }
+    } catch (error: any) {
       console.error('Login failed:', error);
-      // You might want to show an alert here
+      Alert.alert('Login Failed', error.message || 'Invalid email or password');
     } finally {
       setLoading(false);
     }

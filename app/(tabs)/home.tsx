@@ -503,8 +503,11 @@ export default function HomeScreen() {
               ? `Walk ${Math.max(stepsGoal - steps, 0).toLocaleString()} more steps to reach your daily milestone!`
               : 'Connect your health data to see your daily challenge!'}
           </Text>
-          <TouchableOpacity className="bg-white/20 p-3 rounded-lg self-start">
-            <Text className="text-white font-bold">View Details</Text>
+          <TouchableOpacity 
+            className="bg-white/20 p-3 rounded-lg self-start"
+            onPress={() => router.push('/screens/health-insights')}
+          >
+            <Text className="text-white font-bold">View Insights</Text>
           </TouchableOpacity>
         </View>
 

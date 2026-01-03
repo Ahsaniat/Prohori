@@ -7,6 +7,7 @@ interface ButtonProps {
   loading?: boolean;
   variant?: 'primary' | 'secondary' | 'outline';
   className?: string;
+  textClassName?: string;
 }
 
 export default function Button({ 
@@ -14,7 +15,8 @@ export default function Button({
   onPress, 
   loading = false, 
   variant = 'primary',
-  className = ''
+  className = '',
+  textClassName = ''
 }: ButtonProps) {
   
   const getBgColor = () => {
@@ -44,7 +46,7 @@ export default function Button({
       {loading ? (
         <ActivityIndicator color={variant === 'secondary' ? '#374151' : 'white'} />
       ) : (
-        <Text className={`font-bold text-lg ${getTextColor()}`}>
+        <Text className={`font-bold text-lg ${getTextColor()} ${textClassName}`}>
           {title}
         </Text>
       )}

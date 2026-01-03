@@ -7,6 +7,7 @@ import { useColorScheme } from 'nativewind';
 import CustomToggle from '../../components/ui/CustomToggle';
 import authService from '../../services/authService';
 import { API_URL } from '../../constants/Config';
+import auth from '@react-native-firebase/auth';
 
 interface UserProfile {
   name: string;
@@ -45,6 +46,11 @@ export default function SettingsScreen() {
   }, []);
 
   const handleLogout = async () => {
+    try {
+      await auth().signOut();
+    } catch (e) {
+      console.log('Firebase signout failed', e);
+    }
     await authService.logout();
     router.replace('/screens/login');
   };
@@ -80,7 +86,11 @@ export default function SettingsScreen() {
 
   return (
     <ScreenWrapper bg="bg-white dark:bg-black">
-      <ScrollView className="px-5" showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        className="px-5" 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
         <View className="mt-4 mb-6" />
         
         {/* Profile Section */}
@@ -120,6 +130,20 @@ export default function SettingsScreen() {
         </View>
 
         <View className="mb-6">
+          <Text className="text-gray-500 dark:text-gray-400 font-bold mb-2 uppercase text-xs tracking-wider">Health</Text>
+          <SettingsItem 
+            icon="flag" 
+            title="Health Goals" 
+            onPress={() => router.push('/screens/health-goals')}
+          />
+          <SettingsItem 
+            icon="insights" 
+            title="Daily Insights" 
+            onPress={() => router.push('/screens/health-insights')}
+          />
+        </View>
+
+        <View className="mb-6">
           <Text className="text-gray-500 dark:text-gray-400 font-bold mb-2 uppercase text-xs tracking-wider">Preferences</Text>
           <SettingsItem 
             icon="dark-mode" 
@@ -129,9 +153,9 @@ export default function SettingsScreen() {
             onValueChange={toggleColorScheme}
           />
           <SettingsItem 
-            icon="language" 
-            title="Language" 
-            onPress={() => router.push('/screens/language')}
+            icon="security" 
+            title="Two-Factor Authentication" 
+            onPress={() => router.push('/screens/preferences/two-factor-auth')}
           />
         </View>
 
