@@ -226,73 +226,16 @@ class HealthConnectService {
     }
   }
 
-  // Read active calories burned using aggregation (more reliable)
+  // Read active calories burned - disabled due to unreliable data from Health Connect API
   async readActiveCalories(): Promise<number | null> {
-    try {
-      const permissions = await this.checkPermissions();
-      if (!permissions['ActiveCaloriesBurned']) {
-        console.log('[HealthConnect] Permission for ActiveCaloriesBurned denied');
-        return null;
-      }
-
-      // Use aggregateRecord for reliable totals (same approach as steps)
-      const result = await aggregateRecord({
-        recordType: 'ActiveCaloriesBurned',
-        timeRangeFilter: this.getTodayTimeRange(),
-      });
-
-      console.log(`[HealthConnect] ActiveCaloriesBurned aggregate result: ${JSON.stringify(result)}`);
-
-      // The aggregation result contains ACTIVE_CALORIES_TOTAL with inKilocalories
-      const kcal = (result as any)?.ACTIVE_CALORIES_TOTAL?.inKilocalories ?? null;
-      
-      if (kcal !== null && kcal > 0) {
-        const rounded = Math.round(kcal);
-        console.log(`[HealthConnect] Active Calories found: ${rounded} kcal`);
-        return rounded;
-      }
-      
-      console.log('[HealthConnect] No ActiveCaloriesBurned data found');
-      return null;
-    } catch (error) {
-      console.error('[HealthConnect] Error reading active calories:', error);
-      return null;
-    }
+    console.log('[HealthConnect] ActiveCaloriesBurned reading disabled - API returns unreliable data');
+    return null;
   }
 
-  // Read total calories burned using aggregation (more reliable)
+  // Read total calories burned - disabled due to unreliable data from Health Connect API
   async readTotalCalories(): Promise<number | null> {
-    try {
-      const permissions = await this.checkPermissions();
-      if (!permissions['TotalCaloriesBurned']) {
-        console.log('[HealthConnect] Permission for TotalCaloriesBurned denied');
-        return null;
-      }
-
-      // Use aggregateRecord for reliable totals
-      const result = await aggregateRecord({
-        recordType: 'TotalCaloriesBurned',
-        timeRangeFilter: this.getTodayTimeRange(),
-      });
-
-      console.log(`[HealthConnect] TotalCaloriesBurned aggregate result: ${JSON.stringify(result)}`);
-
-      // The aggregation result contains TOTAL_CALORIES_TOTAL with inKilocalories
-      const kcal = (result as any)?.TOTAL_CALORIES_TOTAL?.inKilocalories 
-        ?? (result as any)?.ENERGY_TOTAL?.inKilocalories ?? null;
-      
-      if (kcal !== null && kcal > 0) {
-        const rounded = Math.round(kcal);
-        console.log(`[HealthConnect] Total Calories found: ${rounded} kcal`);
-        return rounded;
-      }
-      
-      console.log('[HealthConnect] No TotalCaloriesBurned data found');
-      return null;
-    } catch (error) {
-      console.error('[HealthConnect] Error reading total calories:', error);
-      return null;
-    }
+    console.log('[HealthConnect] TotalCaloriesBurned reading disabled - API returns unreliable data');
+    return null;
   }
 
   // Read heart rate data
