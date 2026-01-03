@@ -64,6 +64,7 @@ export default function RootLayout() {
           <Stack.Screen name="screens/health-insights" options={{ headerShown: false }} />
           <Stack.Screen name="screens/preferences/two-factor-auth" options={{ headerShown: false }} />
           <Stack.Screen name="screens/change-password" options={{ headerShown: false }} />
+          <Stack.Screen name="screens/live-support" options={{ headerShown: false }} />
         </Stack>
       </KnockWrapper>
       <StatusBar style="auto" />

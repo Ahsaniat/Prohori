@@ -28,27 +28,6 @@ const FAQ_ITEMS = [
   },
 ];
 
-const SUPPORT_OPTIONS = [
-  {
-    icon: 'email' as const,
-    title: 'Email Support',
-    description: 'Get help via email',
-    action: () => Linking.openURL('mailto:support@shasthohive.app'),
-  },
-  {
-    icon: 'chat' as const,
-    title: 'Live Chat',
-    description: 'Chat with our support team',
-    action: () => {},
-  },
-  {
-    icon: 'article' as const,
-    title: 'Documentation',
-    description: 'Browse our help articles',
-    action: () => {},
-  },
-];
-
 export default function HelpCenterScreen() {
   const router = useRouter();
   const { top, bottom } = useSafeAreaInsets();
@@ -56,6 +35,21 @@ export default function HelpCenterScreen() {
   const [expandedFaq, setExpandedFaq] = React.useState<number | null>(null);
 
   const iconColor = colorScheme === 'dark' ? '#E5E7EB' : '#374151';
+
+  const SUPPORT_OPTIONS = [
+    {
+      icon: 'chat' as const,
+      title: 'Live Support',
+      description: 'Chat with our support assistant',
+      action: () => router.push('/screens/live-support'),
+    },
+    {
+      icon: 'email' as const,
+      title: 'Email Support',
+      description: 'Get help via email',
+      action: () => Linking.openURL('mailto:support@shasthohive.app'),
+    },
+  ];
 
   return (
     <View className="flex-1 bg-white dark:bg-black" style={{ paddingTop: top }}>
