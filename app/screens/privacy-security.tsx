@@ -92,7 +92,7 @@ export default function PrivacySecurityScreen() {
           icon="security"
           title="Two-Factor Authentication"
           description="Add an extra layer of security"
-          onPress={() => {}}
+          onPress={() => router.push('/screens/preferences/two-factor-auth')}
         />
 
         {/* Privacy Section */}

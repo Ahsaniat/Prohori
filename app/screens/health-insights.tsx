@@ -11,9 +11,10 @@ export default function HealthInsightsScreen() {
   const router = useRouter();
   const { top, bottom } = useSafeAreaInsets();
   const { colorScheme } = useColorScheme();
-  const { insights, isLoading, error, fetchTodayInsights } = useGoalStore();
+  const { insights, isLoading, fetchTodayInsights } = useGoalStore();
 
   const iconColor = colorScheme === 'dark' ? '#E5E7EB' : '#374151';
+  const bottomPadding = Math.max(bottom, 20);
 
   useEffect(() => {
     fetchTodayInsights();
@@ -66,7 +67,7 @@ export default function HealthInsightsScreen() {
 
       <ScrollView 
         className="flex-1 px-5"
-        contentContainerStyle={{ paddingBottom: bottom + 20 }}
+        contentContainerStyle={{ paddingBottom: bottomPadding + 20 }}
         showsVerticalScrollIndicator={false}
       >
         <Text className="text-gray-500 dark:text-gray-400 mb-4">
@@ -76,12 +77,6 @@ export default function HealthInsightsScreen() {
         {isLoading && !insights && (
           <View className="py-6 items-center">
             <ActivityIndicator size="large" color="#9333EA" />
-          </View>
-        )}
-
-        {!!error && (
-          <View className="bg-red-50 dark:bg-red-900/20 p-3 rounded-xl mb-4">
-            <Text className="text-red-600 dark:text-red-300">{error}</Text>
           </View>
         )}
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -12,7 +12,7 @@ export default function HealthGoalsScreen() {
   const router = useRouter();
   const { top, bottom } = useSafeAreaInsets();
   const { colorScheme } = useColorScheme();
-  const { goals, isLoading, error, fetchGoals, saveGoals } = useGoalStore();
+  const { goals, isLoading, fetchGoals, saveGoals } = useGoalStore();
 
   const [stepsGoal, setStepsGoal] = useState('10000');
   const [caloriesGoal, setCaloriesGoal] = useState('2000');
@@ -57,12 +57,11 @@ export default function HealthGoalsScreen() {
     };
 
     await saveGoals(payload);
-    if (!useGoalStore.getState().error) {
-      router.back();
-    }
+    router.back();
   };
 
   const iconColor = colorScheme === 'dark' ? '#E5E7EB' : '#374151';
+  const bottomPadding = Math.max(bottom, 20);
 
   return (
     <View className="flex-1 bg-white dark:bg-black" style={{ paddingTop: top }}>
@@ -74,102 +73,102 @@ export default function HealthGoalsScreen() {
         <Text className="text-xl font-bold text-gray-900 dark:text-white">Health Goals</Text>
       </View>
 
-      <ScrollView 
-        className="flex-1 px-5"
-        contentContainerStyle={{ paddingBottom: bottom + 20 }}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
       >
-        <Text className="text-gray-500 dark:text-gray-400 mb-4">
-          Set daily goals and an optional destination goal.
-        </Text>
+        <ScrollView 
+          className="flex-1 px-5"
+          contentContainerStyle={{ paddingBottom: bottomPadding + 20 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <Text className="text-gray-500 dark:text-gray-400 mb-4">
+            Set daily goals and an optional destination goal.
+          </Text>
 
-        {isLoading && !goals && (
-          <View className="py-4 items-center">
-            <ActivityIndicator color="#9333EA" />
-          </View>
-        )}
+          {isLoading && !goals && (
+            <View className="py-4 items-center">
+              <ActivityIndicator color="#9333EA" />
+            </View>
+          )}
 
-        {!!error && (
-          <View className="bg-red-50 dark:bg-red-900/20 p-3 rounded-xl mb-4">
-            <Text className="text-red-600 dark:text-red-300">{error}</Text>
-          </View>
-        )}
+          {/* Daily Goals Section */}
+          <Text className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-4 mb-2">
+            Daily Goals
+          </Text>
 
-        {/* Daily Goals Section */}
-        <Text className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-4 mb-2">
-          Daily Goals
-        </Text>
+          <Input
+            label="Steps per day"
+            placeholder="10000"
+            value={stepsGoal}
+            onChangeText={setStepsGoal}
+            keyboardType="numeric"
+          />
+          <Input
+            label="Calories burned per day (kcal)"
+            placeholder="2000"
+            value={caloriesGoal}
+            onChangeText={setCaloriesGoal}
+            keyboardType="numeric"
+          />
+          <Input
+            label="Sleep per day (hours)"
+            placeholder="8"
+            value={sleepGoal}
+            onChangeText={setSleepGoal}
+            keyboardType="numeric"
+          />
+          <Input
+            label="Water per day (liters)"
+            placeholder="2"
+            value={waterGoal}
+            onChangeText={setWaterGoal}
+            keyboardType="numeric"
+          />
 
-        <Input
-          label="Steps per day"
-          placeholder="10000"
-          value={stepsGoal}
-          onChangeText={setStepsGoal}
-          keyboardType="numeric"
-        />
-        <Input
-          label="Calories burned per day (kcal)"
-          placeholder="2000"
-          value={caloriesGoal}
-          onChangeText={setCaloriesGoal}
-          keyboardType="numeric"
-        />
-        <Input
-          label="Sleep per day (hours)"
-          placeholder="8"
-          value={sleepGoal}
-          onChangeText={setSleepGoal}
-          keyboardType="numeric"
-        />
-        <Input
-          label="Water per day (liters)"
-          placeholder="2"
-          value={waterGoal}
-          onChangeText={setWaterGoal}
-          keyboardType="numeric"
-        />
+          {/* Destination Goal Section */}
+          <Text className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-6 mb-2">
+            Destination Goal (Optional)
+          </Text>
 
-        {/* Destination Goal Section */}
-        <Text className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mt-6 mb-2">
-          Destination Goal (Optional)
-        </Text>
+          <Input
+            label="Target weight (kg)"
+            placeholder="e.g., 55"
+            value={targetWeight}
+            onChangeText={setTargetWeight}
+            keyboardType="numeric"
+          />
+          <Input
+            label="Target date (YYYY-MM-DD)"
+            placeholder="e.g., 2026-03-01"
+            value={targetDate}
+            onChangeText={setTargetDate}
+          />
 
-        <Input
-          label="Target weight (kg)"
-          placeholder="e.g., 55"
-          value={targetWeight}
-          onChangeText={setTargetWeight}
-          keyboardType="numeric"
-        />
-        <Input
-          label="Target date (YYYY-MM-DD)"
-          placeholder="e.g., 2026-03-01"
-          value={targetDate}
-          onChangeText={setTargetDate}
-        />
+          <Button
+            title={isLoading ? 'Saving...' : 'Save Goals'}
+            onPress={onSave}
+            loading={isLoading}
+            className="mt-4"
+          />
 
-        <Button
-          title={isLoading ? 'Saving...' : 'Save Goals'}
-          onPress={onSave}
-          loading={isLoading}
-          className="mt-4"
-        />
-
-        {/* Info Card */}
-        <View className="bg-purple-50 dark:bg-purple-900/20 rounded-2xl p-4 mt-6">
-          <View className="flex-row items-start">
-            <MaterialIcons name="info" size={20} color="#9333EA" />
-            <View className="flex-1 ml-3">
-              <Text className="text-sm font-medium text-purple-800 dark:text-purple-300">
-                About Goals
-              </Text>
-              <Text className="text-sm text-purple-600 dark:text-purple-400 mt-1">
-                Your daily goals help track progress on the insights screen. The destination goal is optional and helps you work toward a specific target.
-              </Text>
+          {/* Info Card */}
+          <View className="bg-purple-50 dark:bg-purple-900/20 rounded-2xl p-4 mt-6">
+            <View className="flex-row items-start">
+              <MaterialIcons name="info" size={20} color="#9333EA" />
+              <View className="flex-1 ml-3">
+                <Text className="text-sm font-medium text-purple-800 dark:text-purple-300">
+                  About Goals
+                </Text>
+                <Text className="text-sm text-purple-600 dark:text-purple-400 mt-1">
+                  Your daily goals help track progress on the insights screen. The destination goal is optional and helps you work toward a specific target.
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }

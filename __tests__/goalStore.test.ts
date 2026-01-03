@@ -25,7 +25,6 @@ describe('goalStore', () => {
     expect(state.goals).toBeNull();
     expect(state.insights).toBeNull();
     expect(state.isLoading).toBe(false);
-    expect(state.error).toBeNull();
   });
 
   describe('fetchGoals', () => {
@@ -45,16 +44,15 @@ describe('goalStore', () => {
       expect(goalApiService.getGoals).toHaveBeenCalled();
       expect(useGoalStore.getState().goals).toEqual(mockGoals);
       expect(useGoalStore.getState().isLoading).toBe(false);
-      expect(useGoalStore.getState().error).toBeNull();
     });
 
-    it('handles fetch error', async () => {
+    it('handles fetch error gracefully', async () => {
       goalApiService.getGoals.mockRejectedValue(new Error('Network error'));
 
       await useGoalStore.getState().fetchGoals();
 
-      expect(useGoalStore.getState().error).toBe('Network error');
       expect(useGoalStore.getState().isLoading).toBe(false);
+      expect(useGoalStore.getState().goals).toBeNull();
     });
   });
 
@@ -77,12 +75,11 @@ describe('goalStore', () => {
       expect(useGoalStore.getState().isLoading).toBe(false);
     });
 
-    it('handles save error', async () => {
+    it('handles save error gracefully', async () => {
       goalApiService.upsertGoals.mockRejectedValue(new Error('Save failed'));
 
       await useGoalStore.getState().saveGoals({ steps_goal: 12000 });
 
-      expect(useGoalStore.getState().error).toBe('Save failed');
       expect(useGoalStore.getState().isLoading).toBe(false);
     });
   });
@@ -130,7 +127,6 @@ describe('goalStore', () => {
       expect(state.goals).toBeNull();
       expect(state.insights).toBeNull();
       expect(state.isLoading).toBe(false);
-      expect(state.error).toBeNull();
     });
   });
 });

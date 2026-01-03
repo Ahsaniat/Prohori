@@ -152,11 +152,6 @@ export default function SettingsScreen() {
             value={colorScheme === 'dark'} 
             onValueChange={toggleColorScheme}
           />
-          <SettingsItem 
-            icon="security" 
-            title="Two-Factor Authentication" 
-            onPress={() => router.push('/screens/preferences/two-factor-auth')}
-          />
         </View>
 
         <View className="mb-8">
