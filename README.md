@@ -2,7 +2,7 @@
 
 This is the React Native mobile client for ShasthoHive, built with **Expo** and **NativeWind**.
 
-## 🚀 How to Run
+##  How to Run
 
 1.  **Install Dependencies:**
     ```bash
@@ -22,7 +22,7 @@ This is the React Native mobile client for ShasthoHive, built with **Expo** and 
 
 ---
 
-## 📂 Simplified File Navigation Guide
+##  Simplified File Navigation Guide
 
 Here is a quick breakdown of where everything lives:
 
