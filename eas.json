@@ -1,0 +1,39 @@
+{
+  "cli": {
+    "version": ">= 16.26.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_KNOCK_PUBLIC_API_KEY": "",
+        "EXPO_PUBLIC_KNOCK_FEED_CHANNEL_ID": "",
+        "EXPO_PUBLIC_KNOCK_PUSH_CHANNEL_ID": ""
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_KNOCK_PUBLIC_API_KEY": "",
+        "EXPO_PUBLIC_KNOCK_FEED_CHANNEL_ID": "",
+        "EXPO_PUBLIC_KNOCK_PUSH_CHANNEL_ID": ""
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_KNOCK_PUBLIC_API_KEY": "",
+        "EXPO_PUBLIC_KNOCK_FEED_CHANNEL_ID": "",
+        "EXPO_PUBLIC_KNOCK_PUSH_CHANNEL_ID": ""
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
