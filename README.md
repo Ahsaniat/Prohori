@@ -16,7 +16,6 @@ This is the React Native mobile client for ShasthoHive, built with **Expo** and 
     cd client
     npm install
     ```
-
 2.  **Start the App:**
     - To work on a development build, install the development build from our github releases. In any case of you are adding a new package, the features and implementation tied to that package will not become available untill you are re-building          the entire app.
     ```bash
@@ -43,7 +42,8 @@ This folder handles the navigation. Files created here become routes automatical
     *   `home.tsx`, `meal.tsx`, `workout.tsx`, `chat.tsx`, `settings.tsx`
 *   **`screens/`**: Contains standalone, full-screen pages.
     *   `login.tsx`: The authentication screen.
-    *   `personal-info.tsx` & `notifications.tsx`: Sub-pages accessed from Settings.
+    *   `personal-info.tsx`, `notification-settings.tsx`, `Help and Supprot`, `Preferences` and `About Us`: Sub-pages accessed from Settings.
+    *   `notifications.tsx`: Shows all new and previous notifications.
 
 ### **`components/` (UI Elements)**
 Reusable code blocks to keep screens clean.
