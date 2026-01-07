@@ -1,6 +1,6 @@
 # Node.js Server for Prohori-Clean_Launch
 
-This is the backend server for the Prohori-Clean_Launch application, built with Node.js and Express.
+This is the backend server for the Shasthohive a Clean Launch for deployment, built with Node.js and Express.
 
 ## Deployment
 
@@ -19,7 +19,7 @@ Ensure the following environment variables are set in your Vercel project settin
 
 *   `MONGO_URI`: Connection string for MongoDB.
 *   `GEMINI_API_KEY`: API key for Google Gemini.
-*   `KNOCK_API_KEY`: API key for Knock.app.
+*   `KNOCK_API_KEY`: API key (sk) for Knock.app.
 *   `PORT`: (Optional) Port to run the server on.
 
 ### Start Command
