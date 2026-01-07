@@ -1,6 +1,6 @@
-# Node.js Server for Prohori-Clean_Launch
+# Node.js Server for Shasthohive Clean Launch
 
-This is the backend server for the Shasthohive a Clean Launch for deployment, built with Node.js and Express.
+This is the backend server for the Shasthohive a Clean Launch for deployment, built with Node.js and Express. 
 
 ## Deployment
 
