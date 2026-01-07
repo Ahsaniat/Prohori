@@ -6,8 +6,8 @@ This is the React Native mobile client for ShasthoHive, built with **Expo** and 
 2. Configure FCM, Google Service key from firebase
 3. Configure integration in Knock.app for expo push notification and in app notification
 4. Create workflow in knock.app
-5. Edit eas.json env with channel id and public key from kncok.app Platform/API keys
-6. Edit the .env file with creds as setp 5
+5. Edit eas.json env with channel id and public key from knock.app Platform/API keys
+6. Edit the .env file with creds same as step 5
 
 ##  How to Run
 
