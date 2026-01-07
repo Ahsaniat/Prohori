@@ -18,18 +18,20 @@ This is the React Native mobile client for ShasthoHive, built with **Expo** and 
     ```
 
 2.  **Start the App:**
+    - To work on a development build, install the development build from our github releases. In any case of you are adding a new package, the features and implementation tied to that package will not become available untill you are re-building          the entire app.
     ```bash
-    npx expo start --clear --port 8082
+    npx expo start --clear --port 8082 --dev-client
     ```
+    - If you are just interested to try out our app then go ahead and download an alpha release from our repository and install it in your phone.
 
-3.  **View the App:**
-    *   **Mobile:** Scan the QR code with the **Expo Go** app.
-    *   **Emulator:** Press `a` (Android) or `i` (iOS simulator).
+4.  **View the App (for development only):**
+    *   **Mobile:** Scan the QR code with the **Expo Go** app or use our development build app to scan the QR .
+    *   **Emulator:** Press `a` (Android) or `i` (iOS simulator). To open an android simulation make sure you have adb and java sdk installed. You can also use adb reverse proxy to connect app via usb.
     *   **Web:** Press `w`.
 
 ---
-
-##  Simplified File Navigation Guide
+5. Set EDGE_PATH environment variable with your browser executable path (In linux, usually under /usr/bin/{any-chromium-based-browser-name-you-are-using}) if you want react dev tools before starting the app. Open with pressing j while app on start.
+## File Navigation Guide
 
 Here is a quick breakdown of where everything lives:
 
